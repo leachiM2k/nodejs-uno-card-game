@@ -1,0 +1,24 @@
+{
+  "name": "nodejs-uno-card-game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "chalk": "^1.1.0",
+    "inquirer": "^0.8.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/leachiM2k/nodejs-uno-card-game"
+  },
+  "author": "Michael Rotmanov <leachim2k@leachim2k.de>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leachiM2k/nodejs-uno-card-game/issues"
+  },
+  "homepage": "https://github.com/leachiM2k/nodejs-uno-card-game"
+}
