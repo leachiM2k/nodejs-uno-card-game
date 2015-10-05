@@ -36,7 +36,11 @@ var Kartenstapel = {
 			cards = cards.concat(this.stapel.splice(cardPosition, 1));
 		}
 		return cards;
-	}
+	},
+
+	getAllColors: function() {
+        return this.farben;
+    }
 };
 
 module.exports = Kartenstapel;
