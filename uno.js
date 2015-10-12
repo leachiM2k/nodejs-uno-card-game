@@ -10,7 +10,9 @@ var UnoGame = {
     actualPlayer:  null,
 
     initialize: function () {
-        this.logic = new Logic(Kartenstapel, Player);
+        var cliFarben = [chalk.blue('blau'), chalk.green('gruen'), chalk.red('rot'), chalk.yellow('gelb')];
+        var kartenstapel = new Kartenstapel(cliFarben);
+        this.logic = new Logic(kartenstapel);
     },
 
     start: function () {
@@ -25,8 +27,7 @@ var UnoGame = {
 
     createPlayers: function () {
         for (var i = 0; i < this.playersAmount; i++) {
-            var player = this.logic.createPlayer('Spieler ' + (i + 1), 7);
-            this.logic.addPlayer(player);
+            var player = this.logic.addPlayer('Spieler ' + (i + 1), 7);
             console.log(player.getName() + ' bekommt: ' +
                 player.getAllCards().map(function (card) {
                     return card.getName();

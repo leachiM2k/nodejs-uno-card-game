@@ -4,8 +4,10 @@ var Player = require('./player');
 
 var Logic = function (kartenstapel) {
     this.assJackpot = 0;
+    this.actualCard = null;
     this.actualPlayer = 0;
     this.players = [];
+    this.gameStarted = false;
     this.directionAscending = true;
     this.colorWish = null;
 
@@ -13,20 +15,53 @@ var Logic = function (kartenstapel) {
     this.kartenstapel.initialize();
 };
 
-Logic.prototype.createPlayer = function (name, amountOfCards) {
+Logic.prototype.addPlayer = function (name, amountOfCards) {
+    if (this.gameStarted) {
+        throw new Error('Can not add player on running game');
+    }
     name = name || 'Spieler ' + Math.random();
     amountOfCards = amountOfCards || 7;
     var player = new Player();
     player.receiveCards(this.kartenstapel.give(amountOfCards));
     player.setName(name);
+    this.players.push(player);
     return player;
 };
 
-Logic.prototype.addPlayer = function (player) {
-    this.players.push(player);
+Logic.prototype.getPlayerByHash = function (hash) {
+    return this.players.filter(function (player) {
+        return player.getHash() === hash;
+    })[0];
+};
+
+Logic.prototype.getGameState = function () {
+    var state = {
+        gameStarted: this.gameStarted,
+        players:     this.players.map(function (player) {
+            return {
+                name: player.getName()
+            }
+        }),
+        cardCount:   this.kartenstapel.getStapelCount()
+    };
+
+    if (this.gameStarted) {
+        state.actualCard = this.getActualCard();
+        state.actualPlayer = this.getActualPlayer().getName();
+        state.direction = this.directionAscending ? 'ascending' : 'descending';
+    }
+
+    return state;
 };
 
 Logic.prototype.startGame = function () {
+    if (this.gameStarted) {
+        throw new Error('The game has already began');
+    }
+    if (this.players.length < 2) {
+        throw new Error('No sense to start a game with less than 2 players');
+    }
+    this.gameStarted = true;
     this.setActualCard(this.kartenstapel.give(1)[0]);
     return this.getActualCard();
 };
@@ -84,6 +119,9 @@ function isColorWishOverrideCard(card) {
 }
 
 Logic.prototype.checkMove = function (oldCard, playedCard) {
+    if (!playedCard) {
+        return false;
+    }
     if (this.getAssJackpotCount() > 0 && !isAssJackpotCard(playedCard)) {
         return false;
     }

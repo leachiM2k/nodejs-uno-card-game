@@ -1,9 +1,13 @@
 'use strict';
 
+var randomstring = require("randomstring");
+
 function Player() {
 	this.cards = [];
 	this.name = 'Unbekannter Spieler';
+	this.hash = randomstring.generate();
 };
+
 Player.prototype.receiveCards = function(cards) {
 	this.cards = this.cards.concat(cards);
 };
@@ -18,6 +22,9 @@ Player.prototype.setName = function(name) {
 };
 Player.prototype.getName = function() {
 	return this.name;
+};
+Player.prototype.getHash = function() {
+	return this.hash;
 };
 Player.prototype.getChoices = function() {
 	return this.cards.map(function(card, index) {
