@@ -1,9 +1,9 @@
 'use strict';
 var chalk = require('chalk');
 var inq = require('inquirer');
-var Logic = require('./logic');
-var Player = require('./player');
-var Kartenstapel = require('./Kartenstapel');
+var Logic = require('./lib/logic');
+var Player = require('./lib/player');
+var Kartenstapel = require('./lib/kartenstapel');
 
 var UnoGame = {
     playersAmount: 2,
