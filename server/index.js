@@ -5,6 +5,7 @@ var Hapi = require('hapi');
 
 var serverOptions = {
     connections: {
+        routes: { cors: true },
         router: {
             stripTrailingSlash: true
         }

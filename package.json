@@ -2,15 +2,23 @@
   "name": "nodejs-uno-card-game",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "dependencies": {
     "chalk": "^1.1.0",
-    "inquirer": "^0.8.5"
+    "config": "^1.29.2",
+    "hapi": "^16.6.2",
+    "inquirer": "^0.8.5",
+    "next": "^4.2.3",
+    "randomstring": "^1.1.5",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node index.js",
-    "server": "node server.js",
+    "dev": "next client",
+    "build": "next build client",
+    "start": "next start client",
+    "cli": "node cli",
+    "server": "node server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

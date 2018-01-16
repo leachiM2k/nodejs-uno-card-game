@@ -1,8 +1,8 @@
 'use strict';
 
 var config = require('config');
-var Uno = require('../../lib/logic');
-var Kartenstapel = require('../../lib/kartenstapel');
+var Uno = require('../../../lib/logic');
+var Kartenstapel = require('../../../lib/kartenstapel');
 
 exports.register = function (server, options, next) {
 
