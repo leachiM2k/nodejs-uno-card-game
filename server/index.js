@@ -1,32 +1,23 @@
 'use strict';
 
-var config = require('config');
-var Hapi = require('hapi');
+const config = require('config');
+const Hapi = require('hapi');
 
-var serverOptions = {
-    connections: {
-        routes: { cors: true },
-        router: {
-            stripTrailingSlash: true
-        }
+const serverOptions = {
+    port: process.env.PORT || config.server.port,
+    routes: { cors: true },
+    router: {
+        stripTrailingSlash: true
     }
 };
 
-var server = new Hapi.Server(serverOptions);
+const server = new Hapi.Server(serverOptions);
 
-server.connection({
-    port: process.env.PORT || config.server.port
-});
-
-server.register([
-    {
-        register: require('./plugins/uno')
-    }
-], function (error) {
-    if (error) {
-        throw error;
-    }
-    server.start(function () {
-        console.log('Server running at:', server.info.uri);
-    })
-});
+server.register({ plugin: require('./plugins/uno') })
+    .then(() => server.start())
+    .then(() => { console.log('Server running at:', server.info.uri); })
+    .catch(error => {
+        if (error) {
+            throw error;
+        }
+    });
