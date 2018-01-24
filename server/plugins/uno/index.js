@@ -1,5 +1,6 @@
 'use strict';
 
+const Boom = require('boom');
 const config = require('config');
 const Uno = require('../../../lib/logic');
 const Kartenstapel = require('../../../lib/kartenstapel');
@@ -8,6 +9,14 @@ exports.plugin = {
     register: (server, options) => {
 
         const openGames = {};
+
+        server.subscription('/game/{hash}/subscription', {
+            onSubscribe: async (socket, path, params) => {
+                if (!openGames[params.hash]) {
+                    throw Boom.notFound('Game not found');
+                }
+            }
+        });
 
         // list all known games
         server.route({
@@ -77,6 +86,8 @@ exports.plugin = {
                 }
                 const player = openGames[gameHash].game.addPlayer(request.params.name, config.cardsPerPlayer);
 
+                server.publish('/game/' + gameHash + '/subscription', openGames[gameHash].game.getGameState());
+
                 return { player: player, result: 'OK' };
             }
         });
@@ -103,6 +114,8 @@ exports.plugin = {
                 if (moveResult.action === 'success') {
                     openGames[gameHash].game.getNextPlayer();
                 }
+
+                server.publish('/game/' + gameHash + '/subscription', openGames[gameHash].game.getGameState());
 
                 return {
                     moveResult: moveResult,
@@ -137,6 +150,8 @@ exports.plugin = {
                     openGames[gameHash].game.getNextPlayer();
                 }
 
+                server.publish('/game/' + gameHash + '/subscription', openGames[gameHash].game.getGameState());
+
                 return {
                     newCard: newCard,
                     hasPlayerWon: openGames[gameHash].game.hasPlayerWon(),
@@ -170,6 +185,8 @@ exports.plugin = {
                     openGames[gameHash].game.getNextPlayer();
                 }
 
+                server.publish('/game/' + gameHash + '/subscription', openGames[gameHash].game.getGameState());
+
                 return {
                     jackpotCards: jackpotCards,
                     hasPlayerWon: openGames[gameHash].game.hasPlayerWon(),
@@ -191,6 +208,9 @@ exports.plugin = {
                     return { result: 'GAME_ALREADY_STARTED' };
                 }
                 const card = openGames[gameHash].game.startGame();
+
+                server.publish('/game/' + gameHash + '/subscription', openGames[gameHash].game.getGameState());
+
                 return { card: card, result: 'OK' };
             }
         });

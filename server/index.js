@@ -2,6 +2,7 @@
 
 const config = require('config');
 const Hapi = require('hapi');
+const Nes = require('nes');
 
 const serverOptions = {
     port: process.env.PORT || config.server.port,
@@ -13,7 +14,10 @@ const serverOptions = {
 
 const server = new Hapi.Server(serverOptions);
 
-server.register({ plugin: require('./plugins/uno') })
+Promise.all([
+    server.register(Nes),
+    server.register({ plugin: require('./plugins/uno') })
+])
     .then(() => server.start())
     .then(() => { console.log('Server running at:', server.info.uri); })
     .catch(error => {

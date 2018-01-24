@@ -6,6 +6,7 @@ const GameList = (props) => {
     return (
         <div>
             <h1>Uno</h1>
+            {games.length === 0 && "No games defined"}
             <ul>
                 {games && games.map((item, index) =>
                     <li key={index}>
